@@ -1,20 +1,18 @@
 import argparse
 import logging
-import os
 from pathlib import Path
 
-from rembg import remove
+from rembg import remove, new_session
 from PIL import Image
 
 
-
-def remove_background(image: Image.Image) -> Image.Image:
+def remove_background(image: Image.Image, session) -> Image.Image:
     """
     Use rembg to remove background and return an RGBA image.
     """
     if image.mode != "RGBA":
         image = image.convert("RGBA")
-    result = remove(image)
+    result = remove(image, session=session)
     if result.mode != "RGBA":
         result = result.convert("RGBA")
     return result
@@ -25,6 +23,7 @@ def center_and_resize(
     target_size: int = 224,
     target_area_fraction: float = 0.65,
     max_occupancy: float = 0.9,
+    bbox_margin_ratio: float = 0.08,
 ) -> Image.Image:
     """
     Center the clothing item based on the alpha channel and resize to target_size x target_size.
@@ -48,21 +47,33 @@ def center_and_resize(
 
     if box_w == 0 or box_h == 0:
         return Image.new("RGBA", (target_size, target_size), (0, 0, 0, 0))
+    
+    img_w, img_h = image_rgba.size 
+    margin_x = int(round(box_w * bbox_margin_ratio)) 
+    margin_y = int(round(box_h * bbox_margin_ratio))
 
-    obj = image_rgba.crop(bbox)
+    left2 = max(0, left - margin_x)   
+    upper2 = max(0, upper - margin_y)
+    right2 = min(img_w, right + margin_x) 
+    lower2 = min(img_h, lower + margin_y)
 
-    obj_area = box_w * box_h
+    box_w2 = right2 - left2  
+    box_h2 = lower2 - upper2
+    if box_w2 == 0 or box_h2 == 0: 
+        return Image.new("RGBA", (target_size, target_size), (0, 0, 0, 0))
+
+    obj = image_rgba.crop((left2, upper2, right2, lower2)) 
+
+    obj_area = box_w2 * box_h2  
     desired_area = target_area_fraction * (target_size * target_size)
     scale_area = (desired_area / obj_area) ** 0.5
 
-    max_side = max(box_w, box_h)
-
+    max_side = max(box_w2, box_h2) 
     scale_fit = (target_size * max_occupancy) / max_side
-
     scale = min(scale_area, scale_fit)
 
-    new_w = max(1, int(round(box_w * scale)))
-    new_h = max(1, int(round(box_h * scale)))
+    new_w = max(1, int(round(box_w2 * scale))) 
+    new_h = max(1, int(round(box_h2 * scale))) 
 
     obj_resized = obj.resize((new_w, new_h), resample=Image.LANCZOS)
 
@@ -79,6 +90,7 @@ def center_and_resize(
 def process_image_file(
     input_path: Path,
     output_path: Path,
+    session,
     target_size: int = 224,
     target_area_fraction: float = 0.65,
     max_occupancy: float = 0.9,
@@ -96,12 +108,13 @@ def process_image_file(
         with Image.open(input_path) as img:
             img = img.convert("RGBA")
 
-        img_no_bg = remove_background(img)
+        img_no_bg = remove_background(img, session=session)
         final_img = center_and_resize(
             img_no_bg,
             target_size=target_size,
             target_area_fraction=target_area_fraction,
             max_occupancy=max_occupancy,
+            bbox_margin_ratio=0.08,
         )
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -123,6 +136,8 @@ def process_directory(
     """
     Batch-process all JPG/PNG images in input_dir and write PNG results to output_dir.
     """
+    session = new_session()
+    warmup_result = remove(Image.new("RGBA", (64, 64), (0, 0, 0, 0)), session=session)
     supported_exts = {".jpg", ".jpeg", ".png"}
     input_dir = input_dir.resolve()
     output_dir = output_dir.resolve()
@@ -154,6 +169,7 @@ def process_directory(
             target_size=target_size,
             target_area_fraction=target_area_fraction,
             max_occupancy=max_occupancy,
+            session=session
         )
         if not success:
             continue
