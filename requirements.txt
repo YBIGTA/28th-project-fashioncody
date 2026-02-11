@@ -1,2 +1,6 @@
 rembg[cpu]
 Pillow
+ultralytics
+torch
+torchvision
+transformers
