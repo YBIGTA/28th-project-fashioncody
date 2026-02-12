@@ -24,16 +24,15 @@ from PIL import Image
 
 PROJECT_DIR = Path(__file__).resolve().parent
 SCRIPTS_DIR = PROJECT_DIR / "rec_scripts"
-REMBG_PROJECT_SRC = PROJECT_DIR / "src"
 sys.path.insert(0, str(SCRIPTS_DIR))
-sys.path.insert(0, str(REMBG_PROJECT_SRC))
 
 from ultralytics import YOLO
 from clip_classifier import ClothingClassifier, TEMP_RANGE_MAP
 
 
 try:
-    from process_clothing_images import remove_background, center_and_resize
+    from src.image_preprocess.remove_background import remove_background
+    from src.image_preprocess.center_and_resize import center_and_resize
     from rembg import new_session
     REMBG_AVAILABLE = True
 except ImportError:
@@ -82,7 +81,7 @@ class FashionPipeline:
         elif use_rembg and not REMBG_AVAILABLE:
             logging.warning(
                 "rembg를 사용할 수 없습니다. pip install rembg[cpu] 를 실행하세요.\n"
-                f"코드 경로 확인: {REMBG_PROJECT_SRC}"
+                f"코드 경로 확인: {PROJECT_DIR / 'src'}"
             )
 
         logging.info("파이프라인 준비 완료!\n")

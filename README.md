@@ -12,7 +12,8 @@
 
 2. Execution
 
-        python process_clothing_images.py --input_dir data --output_dir processed
+        python -m src.image_preprocess.cli --input_dir data --output_dir processed
+
 
 ### 파이프라인 실행 (YOLO -> 이미지 제거 -> CLIP)
 1. Environment Setup
