@@ -1,7 +1,7 @@
 """
 패션 코디네이터 전체 파이프라인
 
-YOLOv8 (의류 탐지) → rembg (배경 제거) → CLIP (세부 분류 + 스타일)
+rembg (배경 제거) → YOLOv8 (의류 탐지) → CLIP (세부 분류 + 스타일)
 
 사용법:
     python pipeline.py --image "옷사진.jpg" --model "best.pt"
@@ -21,7 +21,7 @@ import logging
 from pathlib import Path
 from PIL import Image
 
-# ── 경로 설정 ──
+
 PROJECT_DIR = Path(__file__).resolve().parent
 SCRIPTS_DIR = PROJECT_DIR / "rec_scripts"
 REMBG_PROJECT_SRC = PROJECT_DIR / "src"
@@ -51,8 +51,8 @@ class FashionPipeline:
     """
     전체 패션 분석 파이프라인
 
-    1) YOLOv8: 이미지에서 의류 아이템 탐지 (top/bottom/outer/dress/acc)
-    2) rembg: 크롭된 의류의 배경 제거
+    1) rembg: 전체 이미지 배경 제거
+    2) YOLOv8: 배경 제거된 이미지에서 의류 아이템 탐지 (top/bottom/outer/dress/acc)
     3) CLIP: 세부 의류 타입 + 스타일 분류 + 온도 범위 매핑
     """
 
@@ -117,10 +117,18 @@ class FashionPipeline:
         image_path = Path(image_path)
         logging.info(f"처리 중: {image_path.name}")
 
-       
-        results = self.yolo.predict(str(image_path), conf=conf, verbose=False)
-        boxes = results[0].boxes
+        
         img = Image.open(image_path).convert("RGB")
+        if self.use_rembg:
+            logging.info("  배경 제거 중...")
+            img_rgba = remove_background(img, self.rembg_session)
+            img_processed = img_rgba.convert("RGB")
+        else:
+            img_processed = img
+
+        
+        results = self.yolo.predict(img_processed, conf=conf, verbose=False)
+        boxes = results[0].boxes
 
         if len(boxes) == 0:
             logging.info("  탐지된 의류 없음")
@@ -132,7 +140,7 @@ class FashionPipeline:
 
         logging.info(f"  YOLOv8 탐지: {len(boxes)}개 아이템")
 
-     
+        
         items = []
         for i, box in enumerate(boxes):
             cls_id = int(box.cls)
@@ -140,19 +148,8 @@ class FashionPipeline:
             det_conf = float(box.conf)
             x1, y1, x2, y2 = [int(v) for v in box.xyxy[0].tolist()]
 
-  
-            cropped = img.crop((x1, y1, x2, y2))
-
-           
-            if self.use_rembg:
-                cropped_rgba = remove_background(cropped, self.rembg_session)
-                processed = center_and_resize(cropped_rgba)
-                clip_input = processed.convert("RGB")
-            else:
-                clip_input = cropped
-
-          
-            clip_result = self.classifier.classify(clip_input, category)
+            cropped = img_processed.crop((x1, y1, x2, y2))
+            clip_result = self.classifier.classify(cropped, category)
 
             item = {
                 "category": category,
