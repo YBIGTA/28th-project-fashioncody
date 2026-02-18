@@ -1,0 +1,44 @@
+[
+  {
+    "image_name": "test_image_1.png",
+    "category": "아우터",
+    "detection_confidence": 0.8856,
+    "sub_type": "패딩",
+    "sub_type_confidence": 0.8179,
+    "color": "블랙",
+    "color_confidence": 0.9893,
+    "sub_color": "그레이",
+    "sub_color_confidence": 0.6723,
+    "sleeve_length": "긴팔",
+    "sleeve_length_confidence": 0.9924,
+    "length": "노멀",
+    "length_confidence": 0.987,
+    "fit": "노멀",
+    "fit_confidence": 0.9632,
+    "collar": "셔츠칼라",
+    "collar_confidence": 0.9896,
+    "style": "밀리터리",
+    "style_confidence": 0.8415,
+    "sub_style": "스트리트",
+    "sub_style_confidence": 0.9823,
+    "material": [
+      {
+        "value": "패딩",
+        "confidence": 0.9857
+      }
+    ],
+    "print": [
+      {
+        "value": "무지",
+        "confidence": 0.9108
+      }
+    ],
+    "detail": [
+      {
+        "value": "없음",
+        "confidence": 0.0
+      }
+    ],
+    "weather": "한파"
+  }
+]

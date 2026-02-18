@@ -1,0 +1,44 @@
+[
+  {
+    "image_name": "test_image_1.png",
+    "category": "상의",
+    "detection_confidence": 0.9222,
+    "sub_type": "탑",
+    "sub_type_confidence": 0.3646,
+    "color": "화이트",
+    "color_confidence": 0.6154,
+    "sub_color": "블랙",
+    "sub_color_confidence": 0.737,
+    "sleeve_length": "민소매",
+    "sleeve_length_confidence": 0.6973,
+    "length": "노멀",
+    "length_confidence": 0.7297,
+    "fit": "노멀",
+    "fit_confidence": 0.7068,
+    "collar": "밴드칼라",
+    "collar_confidence": 0.3708,
+    "style": "모던",
+    "style_confidence": 0.436,
+    "sub_style": "스트리트",
+    "sub_style_confidence": 0.3342,
+    "material": [
+      {
+        "value": "없음",
+        "confidence": 0.0
+      }
+    ],
+    "print": [
+      {
+        "value": "무지",
+        "confidence": 0.8186
+      }
+    ],
+    "detail": [
+      {
+        "value": "없음",
+        "confidence": 0.0
+      }
+    ],
+    "weather": "폭염"
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "image_name": "test_image_2.png",
+    "category": "하의",
+    "detection_confidence": 0.5635,
+    "sub_type": "팬츠",
+    "sub_type_confidence": 0.9375,
+    "color": "그레이",
+    "color_confidence": 0.5417,
+    "sub_color": "화이트",
+    "sub_color_confidence": 0.8405,
+    "length": "발목",
+    "length_confidence": 0.7217,
+    "fit": "와이드",
+    "fit_confidence": 0.6737,
+    "style": "리조트",
+    "style_confidence": 0.453,
+    "sub_style": "스트리트",
+    "sub_style_confidence": 0.4207,
+    "material": [
+      {
+        "value": "없음",
+        "confidence": 0.0
+      }
+    ],
+    "print": [
+      {
+        "value": "무지",
+        "confidence": 0.6811
+      }
+    ],
+    "detail": [
+      {
+        "value": "없음",
+        "confidence": 0.0
+      }
+    ],
+    "weather": "따뜻"
+  }
+]
