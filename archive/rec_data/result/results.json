@@ -1,0 +1,94 @@
+{
+  "image": "pipeline_test.png",
+  "num_items": 3,
+  "items": [
+    {
+      "category": "bottom",
+      "detection_confidence": 0.767,
+      "bbox": [
+        95,
+        284,
+        224,
+        688
+      ],
+      "sub_type": "슬랙스",
+      "sub_type_confidence": 0.4263,
+      "sub_type_top3": [
+        [
+          "슬랙스",
+          0.4263
+        ],
+        [
+          "반바지",
+          0.2156
+        ],
+        [
+          "스키니",
+          0.19
+        ]
+      ],
+      "temp_range": [
+        17,
+        22
+      ],
+      "style": "포멀",
+      "style_confidence": 0.8331
+    },
+    {
+      "category": "acc",
+      "detection_confidence": 0.652,
+      "bbox": [
+        125,
+        650,
+        177,
+        702
+      ],
+      "sub_type": "목도리",
+      "sub_type_confidence": 1.0,
+      "sub_type_top3": [
+        [
+          "목도리",
+          1.0
+        ]
+      ],
+      "temp_range": [
+        -20,
+        5
+      ],
+      "style": "스포티",
+      "style_confidence": 0.6873
+    },
+    {
+      "category": "top",
+      "detection_confidence": 0.4067,
+      "bbox": [
+        152,
+        152,
+        199,
+        269
+      ],
+      "sub_type": "얇은 긴팔",
+      "sub_type_confidence": 0.4306,
+      "sub_type_top3": [
+        [
+          "얇은 긴팔",
+          0.4306
+        ],
+        [
+          "얇은 셔츠",
+          0.1297
+        ],
+        [
+          "나시/민소매",
+          0.0907
+        ]
+      ],
+      "temp_range": [
+        23,
+        26
+      ],
+      "style": "포멀",
+      "style_confidence": 0.4299
+    }
+  ]
+}

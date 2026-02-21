@@ -1,0 +1,17 @@
+# YOLOv8 Dataset Configuration
+# Multimodal Coordinator - 의류 객체 탐지
+
+path: ../data
+train: train/images
+val: val/images
+test: test/images
+
+# 클래스 정의 (5개)
+names:
+  0: top      # 상의 (나시, 반팔, 긴팔, 후드티, 니트, 맨투맨, 셔츠 등)
+  1: bottom   # 하의 (반바지, 면바지, 슬랙스, 스키니, 청바지 등)
+  2: outer    # 아우터 (가디건, 자켓, 코트, 패딩, 야상, 트렌치코트 등)
+  3: dress    # 원피스 (민소매 원피스, 긴팔 원피스 등)
+  4: acc      # 액세서리 (목도리 등)
+
+nc: 5
